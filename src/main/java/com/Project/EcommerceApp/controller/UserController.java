@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
 
@@ -38,7 +37,7 @@ public class UserController {
 
     @GetMapping("/AllUsers")
     public List<User> getAllUsers(){
-       List <User> users=userService.getAllUsers();
+        List <User> users=userService.getAllUsers();
         return users;
     }
 }

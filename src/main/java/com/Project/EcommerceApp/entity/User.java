@@ -14,7 +14,7 @@ public class User {
 
     private String user_name;
 
-    @Column(name = "user_email", unique = true, nullable = false)
+    @Column(name = "user_email")
     private String email;
 
     private String user_role;

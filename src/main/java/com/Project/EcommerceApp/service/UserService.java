@@ -35,7 +35,7 @@ public class UserService {
         return "USER REMOVED SUCCESSFULLY";
     }
 
-   public List<User> getAllUsers(){
+    public List<User> getAllUsers(){
         return userRepository.findAll();
-   }
+    }
 }

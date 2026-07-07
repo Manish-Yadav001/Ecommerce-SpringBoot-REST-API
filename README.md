@@ -1,6 +1,6 @@
 #  EcommerceApp — Spring Boot REST API
 
-A robust, high-performance RESTful backend system built using **Java 25 (JDK 25.0.2)** and **Spring Boot 3.5.16**. This application serves as the production engine for an E-commerce platform, exposing highly structured REST endpoints to handle comprehensive user life cycles, catalog management, real-time inventory adjustments, and complex transactional multi-item order processing.
+A robust, high-performance RESTful backend system built using **Java 17 (JDK 21.0.2)** and **Spring Boot 3.5.16**. This application serves as the production engine for an E-commerce platform, exposing highly structured REST endpoints to handle comprehensive user life cycles, catalog management, real-time inventory adjustments, and complex transactional multi-item order processing.
 
 The project focuses on industry-standard clean code practices, optimized JPA entity relationships, and rigorous transaction boundaries.
 
@@ -110,7 +110,7 @@ Product
 
 ##  Complete Technology Stack Specifications
 
-- **Language Runtime:** Java 25 (JDK 25.0.2)
+- **Language Runtime:** Java 17 (JDK 21.0.2)
 - **Framework Core:** Spring Boot 3.5.16 (Spring MVC, Spring Data JPA)
 - **Core ORM Framework:** Hibernate ORM 6.6.53.Final
 - **Connection Management:** HikariCP 6.3.3 (Zero-overhead connection pooling)
@@ -126,51 +126,51 @@ Although Hibernate's `spring.jpa.hibernate.ddl-auto=update` pipeline will automa
 CREATE DATABASE IF NOT EXISTS Ecommerce_App_db;
 USE Ecommerce_App_db;
 
--- 1. Base structure mapping to User Entity
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) DEFAULT 'CUSTOMER',
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    user_name VARCHAR(100) NOT NULL,
+    user_email VARCHAR(150) NOT NULL UNIQUE, 
+    user_role VARCHAR(50) NOT NULL
+);
 
--- 2. Base structure mapping to Product Entity
-CREATE TABLE IF NOT EXISTS products (
+
+CREATE TABLE products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(150) NOT NULL,
-    price DOUBLE NOT NULL,
-    stock_quantity INT NOT NULL DEFAULT 0,
-    image_url VARCHAR(500),
-    description TEXT
-) ENGINE=InnoDB;
+    product_price DOUBLE NOT NULL,     
+    stock_quantity INT NOT NULL        
+);
 
--- 3. Base structure mapping to Order Entity
-CREATE TABLE IF NOT EXISTS orders (
+
+CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_name VARCHAR(100),
+    order_name VARCHAR(150),
     total_amount DOUBLE NOT NULL,
-    order_status VARCHAR(50) DEFAULT 'PENDING',
-    local_date_time DATETIME(6),
-    user_id INT NOT NULL, 
-    CONSTRAINT FK_orders_user FOREIGN KEY (user_id) 
-        REFERENCES users(user_id) 
-        ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB;
+    order_status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    local_date_time DATETIME NOT NULL, 
+    user_id INT NOT NULL,              
+    CONSTRAINT fk_orders_user 
+        FOREIGN KEY (user_id) 
+        REFERENCES users (user_id)
+        ON DELETE RESTRICT 
+        ON UPDATE CASCADE
+);
 
--- 4. Junction Table mapping to OrderProduct Joint Entity (Many-to-Many Layout)
-CREATE TABLE IF NOT EXISTS order_product (
+
+CREATE TABLE order_product (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT NOT NULL,
-    product_id INT NOT NULL,
     quantity INT NOT NULL,
     price_at_purchase DOUBLE NOT NULL, 
-    CONSTRAINT FK_op_order FOREIGN KEY (order_id) 
-        REFERENCES orders(order_id) 
-        ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT FK_op_product FOREIGN KEY (product_id) 
-        REFERENCES products(product_id) 
-        ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB;
+    order_id INT NOT NULL,             
+    product_id INT NOT NULL,         
+    CONSTRAINT fk_op_order 
+        FOREIGN KEY (order_id) 
+        REFERENCES orders (order_id)
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_op_product 
+        FOREIGN KEY (product_id) 
+        REFERENCES products (product_id)
+        ON DELETE RESTRICT 
+        ON UPDATE CASCADE
+);

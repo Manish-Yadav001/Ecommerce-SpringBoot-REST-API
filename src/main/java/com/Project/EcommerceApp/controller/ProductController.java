@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/product")
 public class ProductController {
     private final ProductService productService;
 
@@ -27,7 +26,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-   public ResponseEntity<String> deleteProduct(@PathVariable int id){
+    public ResponseEntity<String> deleteProduct(@PathVariable int id){
         String status= productService.deleteProduct(id);
         if(status.equals("PRODUCT DOESN'T EXIST")){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PRODUCT DOESN'T EXIST");
@@ -35,17 +34,17 @@ public class ProductController {
         else {
             return ResponseEntity.status(HttpStatus.OK).body("PRODUCT DELETED SUCCESSFULLY");
         }
-   }
+    }
 
-   @PutMapping("/updateinventory/{name}")
+    @PutMapping("/updateinventory/{name}")
     public ResponseEntity<String> updateProduct(@RequestBody Product product,@PathVariable String name){
-       String status= productService.updateProducts(name,product);
+        String status= productService.updateProducts(name,product);
 
-       if(status.equals("PRODUCT DOESN'T EXIST")){
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PRODUCT DOESN'T EXIST");
-       }
-       else {
-           return ResponseEntity.status(HttpStatus.OK).body("INVENTORY UPDATED SUCCESSFULLY");
-       }
-   }
+        if(status.equals("PRODUCT DOESN'T EXIST")){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PRODUCT DOESN'T EXIST");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body("INVENTORY UPDATED SUCCESSFULLY");
+        }
+    }
 }
